@@ -1,0 +1,44 @@
+<%= form_with model: @patient, local: true do |form| %>
+    <% if @patient.errors.any? %>
+      <div id="error_explanation" class="alert alert-danger">
+        <h6>
+          <%= pluralize(@patient.errors.count, "error") %> prohibited
+          this patient from being saved:
+        </h6>
+        <ul>
+          <% @patient.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :patient_name, "Patient Name" %><br>
+      <%= form.text_field :patient_name, :class => 'form-control', placeholder: "Patient Name" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :category, "Illness" %><br>
+      <%= form.text_field :category, :class => 'form-control', placeholder: "Category" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :description, "Description" %><br>
+      <%= form.text_area :description, :class => 'form-control', :rows => 3 %>
+    </div>
+    <div class="form-group">
+      <%= form.label :contact_email, "Email Address" %><br>
+      <%= form.email_field :contact_email, :class => 'form-control', placeholder: @current_user.email %>
+    </div>
+
+    <% if @patient.id.present? %>
+        <%= form.submit "Update", :class => 'btn btn-primary' %>
+    <% else %>
+        <%= form.submit "Submit", :class => 'btn btn-primary' %>
+    <% end %>
+
+    <% if @patient.id != nil && logged_in? %>
+    <%= link_to 'Remove', patient_path(@patient), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+    <% end %>
+<% end %>

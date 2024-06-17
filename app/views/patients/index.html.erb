@@ -1,0 +1,72 @@
+<main role="main">
+  <div class="album py-5 bg-light">
+    <div class="container">
+
+      <% if @patients.any?&&logged_in? %>
+        <div class="row row-cols-1 row-cols-md-3">
+          <% @patients.each do |patient| %>
+            <div class="col mb-4">
+              <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title"><%= patient.patient_name %></h5>
+                  <p class="card-text text-muted mb-3"><%= patient.description.truncate(80) %></p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <%= link_to 'View', patient_path(patient), class: "btn btn-sm btn-outline-primary" %>
+                      <%= link_to 'Edit', edit_patient_path(patient), class: "btn btn-sm btn-outline-secondary" %>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <nav aria-label="Patients Pagination">
+          <ul class="pagination justify-content-center">
+            <% if @current_page > 1 %>
+              <li class="page-item">
+                <%= link_to "First", patients_path(page: 1), class: "page-link" %>
+              </li>
+            <% end %>
+
+            <% ([@current_page - 2, 1].max..[@current_page + 2, @total_pages].min).each do |i| %>
+              <% if i == @current_page %>
+                <li class="page-item active" aria-current="page">
+                  <span class="page-link"><%= i %><span class="sr-only">(current)</span></span>
+                </li>
+              <% else %>
+                <li class="page-item">
+                  <%= link_to i, patients_path(page: i), class: "page-link" %>
+                </li>
+              <% end %>
+            <% end %>
+
+            <% if @current_page < @total_pages %>
+              <li class="page-item">
+                <%= link_to "Last", patients_path(page: @total_pages), class: "page-link" %>
+              </li>
+            <% end %>
+          </ul>
+        </nav>
+
+      <% else %>
+        <% if logged_in? %>
+        <div class="row">
+            <div class="col text-center">
+            <p>No patients available</p>
+            </div>
+        </div>
+        <% else %>
+        <div class="row">
+            <div class="col text-center">
+            <p>Please Login to view patients</p>
+            </div>
+        </div>
+        <% end %>
+      <% end %>
+
+    </div>
+  </div>
+</main>

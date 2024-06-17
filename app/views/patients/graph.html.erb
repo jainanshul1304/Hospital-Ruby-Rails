@@ -1,0 +1,32 @@
+<div class="container">
+  <h1>Patients Registered by Day</h1>
+  <canvas id="patientsChart" width="400" height="200"></canvas>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var ctx = document.getElementById('patientsChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: <%= @patient_counts.keys.map { |date| date.strftime('%Y-%m-%d') }.to_json.html_safe %>,
+        datasets: [{
+          label: 'Patients Registered',
+          data: <%= @patient_counts.values.to_json.html_safe %>,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+  });
+</script>
